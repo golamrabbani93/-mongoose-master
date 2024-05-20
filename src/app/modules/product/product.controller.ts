@@ -83,11 +83,19 @@ const updateProduct = async (req: Request, res: Response) => {
   try {
     const productID = req.params.productId as string
     const result = await productServices.updateProductIntoDB(productID)
-    res.status(200).json({
-      success: true,
-      message: 'Product created successfully!',
-      data: result,
-    })
+    if (result !== null) {
+      res.status(200).json({
+        success: true,
+        message: 'Product updated successfully!',
+        data: result,
+      })
+    } else {
+      res.status(400).json({
+        success: true,
+        message: 'Product updated Unsuccessfully!',
+        data: result,
+      })
+    }
   } catch (error) {
     res.status(501).json({
       success: false,
