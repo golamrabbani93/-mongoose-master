@@ -13,7 +13,14 @@ const getAllProductIntoDB = async () => {
   return result
 }
 
+// ! Get Single Product by ID From Database
+const getSingleProductIntoDB = async (productID: string) => {
+  const result = await ProductModel.findOne({ _id: productID })
+  return result
+}
+
 export const productServices = {
   saveProductIntoDB,
   getAllProductIntoDB,
+  getSingleProductIntoDB,
 }

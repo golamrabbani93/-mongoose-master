@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*global console*/
 
 import app from './app'
