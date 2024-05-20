@@ -15,4 +15,11 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Mongoose Master Server is Running')
 })
 
+//! Route Not Found Error
+app.all('*', (req: Request, res: Response) => {
+  res.status(500).json({
+    success: false,
+    message: 'Route not found',
+  })
+})
 export default app
