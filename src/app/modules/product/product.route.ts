@@ -12,4 +12,8 @@ router.get('/:productId', productController.getSingleProduct)
 // !Create Product To Database
 router.post('/', productController.createProduct)
 
+// ! Update Product by ID
+
+router.put('/:productId', productController.updateProduct)
+
 export const productRoute = router

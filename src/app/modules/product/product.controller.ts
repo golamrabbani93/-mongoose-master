@@ -6,11 +6,19 @@ const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body
     const result = await productServices.saveProductIntoDB(productData)
-    res.status(200).json({
-      success: true,
-      message: 'Product created successfully!',
-      data: result,
-    })
+    if (result._id) {
+      res.status(200).json({
+        success: true,
+        message: 'Product created successfully!',
+        data: result,
+      })
+    } else {
+      res.status(400).json({
+        success: true,
+        message: 'Product created Unsuccessfully!',
+        data: result,
+      })
+    }
   } catch (error) {
     res.status(501).json({
       success: false,
@@ -70,8 +78,27 @@ const getSingleProduct = async (req: Request, res: Response) => {
   }
 }
 
+// ! Update Product Quantity By Product Id
+const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const productID = req.params.productId as string
+    const result = await productServices.updateProductIntoDB(productID)
+    res.status(200).json({
+      success: true,
+      message: 'Product created successfully!',
+      data: result,
+    })
+  } catch (error) {
+    res.status(501).json({
+      success: false,
+      message: 'There is a problem with the server',
+    })
+  }
+}
+
 export const productController = {
   createProduct,
   getAllProducts,
   getSingleProduct,
+  updateProduct,
 }

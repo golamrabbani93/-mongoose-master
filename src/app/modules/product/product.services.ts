@@ -19,8 +19,24 @@ const getSingleProductIntoDB = async (productID: string) => {
   return result
 }
 
+// ! Update Product Quantity by ID From Database
+const updateProductIntoDB = async (productID: string) => {
+  // ! Get Previous Product Quantity
+  const result = await ProductModel.findOne({ _id: productID })
+  const prevQuantity = result?.inventory.quantity as number
+
+  // ! find Product By id And Update Quantity
+  const updatedProduct = await ProductModel.findByIdAndUpdate(
+    productID,
+    { 'inventory.quantity': prevQuantity - 1 },
+    { new: true },
+  )
+  return updatedProduct
+}
+
 export const productServices = {
   saveProductIntoDB,
   getAllProductIntoDB,
   getSingleProductIntoDB,
+  updateProductIntoDB,
 }
