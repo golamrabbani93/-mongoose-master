@@ -1,11 +1,15 @@
 import { Request, Response } from 'express'
 import { productServices } from './product.services'
+import { productValidationSchema } from './product.validation'
 
 // !Create Product
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body
-    const result = await productServices.saveProductIntoDB(productData)
+
+    // !Make Validation productData using ZOD Validation
+    const validProductData = productValidationSchema.parse(productData)
+    const result = await productServices.saveProductIntoDB(validProductData)
     if (result._id) {
       res.status(200).json({
         success: true,
@@ -20,9 +24,19 @@ const createProduct = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
+    const validationError = (issues: any[]) => {
+      if (!issues) return {}
+
+      return issues.reduce((acc: any, issue, index: number) => {
+        const path = issue.path[0]
+        const message = issue.message
+        acc[`issue-${index + 1}`] = { message, path }
+        return acc
+      }, {})
+    }
     res.status(501).json({
       success: false,
-      message: 'There is a problem with the server',
+      errorMessage: validationError(error?.issues),
     })
   }
 }

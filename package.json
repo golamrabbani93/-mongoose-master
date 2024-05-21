@@ -17,7 +17,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongoose": "^8.3.5"
+    "mongoose": "^8.3.5",
+    "zod": "^3.23.8"
   },
   "name": "back-end_setup_with_tsc",
   "version": "1.0.0",
