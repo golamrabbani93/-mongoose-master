@@ -52,6 +52,14 @@ const updateProductIntoDB = async (productID: string, quantity: number = 1) => {
       { 'inventory.quantity': prevQuantity - quantity },
       { new: true },
     )
+
+    if ((updatedProduct?.inventory.quantity as number) === 0) {
+      await ProductModel.findByIdAndUpdate(
+        productID,
+        { 'inventory.inStock': false },
+        { new: true },
+      )
+    }
     return updatedProduct
   } else {
     const success: boolean = false
