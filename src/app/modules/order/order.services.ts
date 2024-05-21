@@ -21,8 +21,17 @@ const saveOrderIntoDB = async (orderData: Order) => {
 
 // !Get all Order From Database
 
-const getAllOrderIntoDB = async () => {
-  const result = await OrderModel.find()
+const getAllOrderIntoDB = async (userEmail?: string) => {
+  if (!userEmail) {
+    const result = await OrderModel.find()
+    return result
+  }
+  // !find Order By UserEmail
+  const result = await OrderModel.aggregate([
+    {
+      $match: { email: userEmail },
+    },
+  ])
   return result
 }
 
