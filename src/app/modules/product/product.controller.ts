@@ -27,11 +27,19 @@ const createProduct = async (req: Request, res: Response) => {
   }
 }
 
-// !Get all Products
+// !Get all Products And search Products
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await productServices.getAllProductIntoDB()
-    if (result.length > 0) {
+    const searchTerm = req.query.searchTerm as string | undefined
+
+    const result = await productServices.getAllProductIntoDB(searchTerm)
+    if (searchTerm && result.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term '${searchTerm}' fetched successfully!`,
+        data: result,
+      })
+    } else if (result.length > 0) {
       res.status(200).json({
         success: true,
         message: 'Products fetched successfully!',
@@ -40,7 +48,7 @@ const getAllProducts = async (req: Request, res: Response) => {
     } else {
       res.status(200).json({
         success: true,
-        message: 'There is no Products data here',
+        message: 'Products Not Found!',
         data: null,
       })
     }

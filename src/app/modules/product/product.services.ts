@@ -8,8 +8,27 @@ const saveProductIntoDB = async (productData: Product) => {
 }
 
 // ! Get All Products From Database
-const getAllProductIntoDB = async () => {
-  const result = await ProductModel.find()
+const getAllProductIntoDB = async (searchTerm?: string) => {
+  // ! if serach Term not Found Send All Products
+  if (!searchTerm) {
+    const result = await ProductModel.find()
+    return result
+  }
+  //   !create Pipeline for matching Products
+  const pipeline = [
+    {
+      $match: {
+        $or: [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } },
+          { category: { $regex: searchTerm, $options: 'i' } },
+          { tags: { $regex: searchTerm, $options: 'i' } },
+        ],
+      },
+    },
+  ]
+  // ! Aggregate and get matching products
+  const result = await ProductModel.aggregate(pipeline)
   return result
 }
 
