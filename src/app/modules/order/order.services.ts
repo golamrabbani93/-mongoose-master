@@ -19,6 +19,14 @@ const saveOrderIntoDB = async (orderData: Order) => {
   }
 }
 
+// !Get all Order From Database
+
+const getAllOrderIntoDB = async () => {
+  const result = await OrderModel.find()
+  return result
+}
+
 export const orderServices = {
   saveOrderIntoDB,
+  getAllOrderIntoDB,
 }

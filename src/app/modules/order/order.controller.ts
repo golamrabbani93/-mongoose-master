@@ -51,10 +51,20 @@ const createOrder = async (req: Request, res: Response) => {
 // !Get all Orders
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    res.status(200).json({
-      success: true,
-      message: 'Get all Order',
-    })
+    const result = await orderServices.getAllOrderIntoDB()
+    if (result.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Orders fetched successfully!',
+        data: result,
+      })
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Products Not Found!',
+        data: null,
+      })
+    }
   } catch (error) {
     res.status(501).json({
       success: false,
