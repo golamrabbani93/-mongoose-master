@@ -61,9 +61,8 @@ const getAllProducts = async (req: Request, res: Response) => {
       })
     } else {
       res.status(200).json({
-        success: true,
+        success: false,
         message: 'Products Not Found!',
-        data: null,
       })
     }
   } catch (error) {
