@@ -93,7 +93,33 @@ const updateProduct = async (req: Request, res: Response) => {
       res.status(400).json({
         success: true,
         message: 'Product updated Unsuccessfully!',
-        data: result,
+        data: null,
+      })
+    }
+  } catch (error) {
+    res.status(501).json({
+      success: false,
+      message: 'There is a problem with the server',
+    })
+  }
+}
+
+// ! Delete Product By ID
+const deleteSingleProduct = async (req: Request, res: Response) => {
+  try {
+    const productID = req.params.productId as string
+    const result = await productServices.deleteSingleProductIntoDB(productID)
+    if (result?.deletedCount > 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Product deleted successfully!',
+        data: null,
+      })
+    } else {
+      res.status(400).json({
+        success: true,
+        message: 'Product deleted Unsuccessfully!',
+        data: null,
       })
     }
   } catch (error) {
@@ -109,4 +135,5 @@ export const productController = {
   getAllProducts,
   getSingleProduct,
   updateProduct,
+  deleteSingleProduct,
 }

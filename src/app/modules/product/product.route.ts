@@ -13,7 +13,9 @@ router.get('/:productId', productController.getSingleProduct)
 router.post('/', productController.createProduct)
 
 // ! Update Product by ID
-
 router.put('/:productId', productController.updateProduct)
+
+// ! Delete Product by ID
+router.delete('/:productId', productController.deleteSingleProduct)
 
 export const productRoute = router
