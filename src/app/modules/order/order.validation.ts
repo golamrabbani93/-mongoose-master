@@ -2,7 +2,12 @@ import { z } from 'zod'
 
 export const orderValidationSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
-  productId: z.string(),
+  productId: z
+    .string({
+      invalid_type_error: 'Product Id must be String',
+      required_error: 'Product Id  is required',
+    })
+    .nonempty('Product Id  is required'),
   price: z
     .number({
       invalid_type_error: 'Price must be Number',
