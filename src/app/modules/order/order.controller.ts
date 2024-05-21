@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { orderServices } from './order.services'
+import { orderValidationSchema } from './order.validation'
 
 // !Create Product
 const createOrder = async (req: Request, res: Response) => {
@@ -7,8 +8,9 @@ const createOrder = async (req: Request, res: Response) => {
     const orderData = req.body
 
     // !Make Validation Order Data using ZOD Validation
-    // const validProductData = productValidationSchema.parse(productData)
-    const result = await orderServices.saveOrderIntoDB(orderData)
+    const validOrderData = orderValidationSchema.parse(orderData)
+
+    const result = await orderServices.saveOrderIntoDB(validOrderData)
     if (result._id) {
       res.status(200).json({
         success: true,

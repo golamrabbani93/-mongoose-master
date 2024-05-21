@@ -7,7 +7,7 @@ const OrderSchema = new Schema<Order>({
     required: true,
   },
   productId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   price: {

@@ -1,8 +1,6 @@
-import { Types } from 'mongoose'
-
 export type Order = {
   email: string
-  productId: Types.ObjectId
+  productId: string
   price: number
   quantity: number
 }
