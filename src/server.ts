@@ -20,7 +20,6 @@ async function main() {
   } catch (error) {
     //! Handle connection error
     console.log('Error connecting to MongoDB:', error)
-    console.log('Error connecting to MongoDB:', error)
   }
 }
 
