@@ -39,18 +39,20 @@ const getSingleProductIntoDB = async (productID: string) => {
 }
 
 // ! Update Product Quantity by ID From Database
-const updateProductIntoDB = async (productID: string) => {
+const updateProductIntoDB = async (productID: string, quantity: number = 1) => {
   // ! Get Previous Product Quantity
   const result = await ProductModel.findOne({ _id: productID })
   const prevQuantity = result?.inventory.quantity as number
 
-  // ! find Product By id And Update Quantity
-  const updatedProduct = await ProductModel.findByIdAndUpdate(
-    productID,
-    { 'inventory.quantity': prevQuantity - 1 },
-    { new: true },
-  )
-  return updatedProduct
+  if (prevQuantity >= quantity) {
+    // ! find Product By id And Update Quantity
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+      productID,
+      { 'inventory.quantity': prevQuantity - quantity },
+      { new: true },
+    )
+    return updatedProduct
+  }
 }
 
 // ! Delete Single Product by ID From Database

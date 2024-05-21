@@ -11,5 +11,5 @@ export const orderValidationSchema = z.object({
       invalid_type_error: 'Order Quantity must be Number',
       required_error: 'Order Quantity  is required',
     })
-    .min(0, 'Quantity must be a non-negative number'),
+    .min(1, 'Minimum Quantity 1 '),
 })

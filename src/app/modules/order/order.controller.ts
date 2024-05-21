@@ -6,16 +6,22 @@ import { orderValidationSchema } from './order.validation'
 const createOrder = async (req: Request, res: Response) => {
   try {
     const orderData = req.body
-
     // !Make Validation Order Data using ZOD Validation
     const validOrderData = orderValidationSchema.parse(orderData)
 
     const result = await orderServices.saveOrderIntoDB(validOrderData)
-    if (result._id) {
+    if (result?._id) {
       res.status(200).json({
         success: true,
         message: 'Order created successfully!!',
         data: result,
+      })
+    }
+    //! This Condition Use for Product Quantity Check
+    else if (result === undefined) {
+      res.status(400).json({
+        success: false,
+        message: 'Insufficient quantity available in inventory',
       })
     } else {
       res.status(400).json({

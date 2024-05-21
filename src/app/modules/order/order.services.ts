@@ -1,10 +1,22 @@
+import { productServices } from '../product/product.services'
 import { Order } from './order.interface.'
 import { OrderModel } from './order.model'
 
 // ! Save Order In databse
 const saveOrderIntoDB = async (orderData: Order) => {
-  const result = await OrderModel.create(orderData)
-  return result
+  // !get Product id and quantity
+  const { productId, quantity } = orderData
+
+  //  !upadte Quantity with productID
+  const updateQuantity = await productServices.updateProductIntoDB(
+    productId,
+    quantity,
+  )
+  // ! If Product Quantity Available the user create new order
+  if (updateQuantity !== undefined) {
+    const result = await OrderModel.create(orderData)
+    return result
+  }
 }
 
 export const orderServices = {
