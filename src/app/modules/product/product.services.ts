@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose'
 import { Product } from './product.interface'
 import { ProductModel } from './product.model'
 
@@ -43,8 +44,9 @@ const updateProductIntoDB = async (productID: string, quantity: number = 1) => {
   // ! Get Previous Product Quantity
   const result = await ProductModel.findOne({ _id: productID })
   const prevQuantity = result?.inventory.quantity as number
+  const databaseProductId = result?._id.toString()
 
-  if (prevQuantity >= quantity) {
+  if (prevQuantity >= quantity && databaseProductId === productID) {
     // ! find Product By id And Update Quantity
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       productID,
@@ -52,6 +54,9 @@ const updateProductIntoDB = async (productID: string, quantity: number = 1) => {
       { new: true },
     )
     return updatedProduct
+  } else {
+    const success: boolean = false
+    return success
   }
 }
 

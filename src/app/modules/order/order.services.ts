@@ -13,7 +13,7 @@ const saveOrderIntoDB = async (orderData: Order) => {
     quantity,
   )
   // ! If Product Quantity Available the user create new order
-  if (updateQuantity !== undefined) {
+  if (updateQuantity !== false) {
     const result = await OrderModel.create(orderData)
     return result
   }
