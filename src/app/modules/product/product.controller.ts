@@ -112,7 +112,7 @@ const updateProduct = async (req: Request, res: Response) => {
       })
     } else {
       res.status(400).json({
-        success: true,
+        success: false,
         message: 'Product updated Unsuccessfully!',
         data: null,
       })
@@ -138,7 +138,7 @@ const deleteSingleProduct = async (req: Request, res: Response) => {
       })
     } else {
       res.status(400).json({
-        success: true,
+        success: false,
         message: 'Product deleted Unsuccessfully!',
         data: null,
       })

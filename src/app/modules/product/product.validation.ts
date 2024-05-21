@@ -50,7 +50,7 @@ export const productValidationSchema = z.object({
         invalid_type_error: 'Product Quantity must be Number',
         required_error: 'Product Quantity  is required',
       })
-      .min(0, 'Quantity must be a non-negative number'),
+      .min(1, 'Quantity must be a non-negative number and minimum 1'),
     inStock: z.boolean(),
   }),
 })

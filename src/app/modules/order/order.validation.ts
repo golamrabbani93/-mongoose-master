@@ -4,8 +4,11 @@ export const orderValidationSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   productId: z.string(),
   price: z
-    .number({ required_error: 'Price is required' })
-    .min(0, 'Price must be a non-negative number'),
+    .number({
+      invalid_type_error: 'Price must be Number',
+      required_error: 'Price is required',
+    })
+    .positive('Price must be a positive number'),
   quantity: z
     .number({
       invalid_type_error: 'Order Quantity must be Number',
