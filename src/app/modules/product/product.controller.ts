@@ -24,10 +24,10 @@ const createProduct = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
-    const validationError = (issues: any[]) => {
+    const validationError = (issues) => {
       if (!issues) return {}
 
-      return issues.reduce((acc: any, issue, index: number) => {
+      return issues.reduce((acc, issue, index: number) => {
         const path = issue.path[0]
         const message = issue.message
         acc[`issue-${index + 1}`] = { message, path }
