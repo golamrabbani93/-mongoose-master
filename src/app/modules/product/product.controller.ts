@@ -105,7 +105,7 @@ const getSingleProduct = async (req: Request, res: Response) => {
       })
     } else {
       res.status(200).json({
-        success: true,
+        success: false,
         message: 'Product not Found',
         data: null,
       })
