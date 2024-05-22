@@ -106,7 +106,7 @@ const getSingleProduct = async (req: Request, res: Response) => {
     } else {
       res.status(200).json({
         success: true,
-        message: 'There is no Products data here',
+        message: 'Product not Found',
         data: null,
       })
     }
@@ -145,7 +145,7 @@ const updateProduct = async (req: Request, res: Response) => {
     } else {
       res.status(400).json({
         success: false,
-        message: 'Product updated Unsuccessfully!',
+        message: 'Product updated Unsuccessfull!',
         data: null,
       })
     }
