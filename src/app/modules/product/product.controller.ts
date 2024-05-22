@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { productServices } from './product.services'
 import { productValidationSchema } from './product.validation'
 import { ZodError, ZodIssue } from 'zod'
+import { Product } from './product.interface'
 
 type ValidationErrorOutput = {
   [key: string]: {
@@ -120,8 +121,21 @@ const getSingleProduct = async (req: Request, res: Response) => {
 // ! Update Product Quantity By Product Id
 const updateProduct = async (req: Request, res: Response) => {
   try {
+    // !Get Product id From params
     const productID = req.params.productId as string
-    const result = await productServices.updateProductIntoDB(productID)
+
+    // !get update doc from user
+    const updateProductDoc: Product = req.body
+
+    // !Make Validation productData using ZOD Validation
+    const validUpdateProductData =
+      productValidationSchema.parse(updateProductDoc)
+
+    // !Send ProductId And validUpdateProductData
+    const result = await productServices.updateProductIntoDB(
+      productID,
+      validUpdateProductData,
+    )
     if (result !== false) {
       res.status(200).json({
         success: true,
@@ -136,10 +150,17 @@ const updateProduct = async (req: Request, res: Response) => {
       })
     }
   } catch (error) {
-    res.status(501).json({
-      success: false,
-      message: 'There is a problem with the server',
-    })
+    if (error instanceof ZodError) {
+      res.status(400).json({
+        success: false,
+        errorMessage: validationError(error.issues),
+      })
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+      })
+    }
   }
 }
 

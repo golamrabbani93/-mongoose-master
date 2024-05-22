@@ -39,27 +39,31 @@ const getSingleProductIntoDB = async (productID: string) => {
 }
 
 // ! Update Product Quantity by ID From Database
-const updateProductIntoDB = async (productID: string, quantity: number = 1) => {
-  // ! Get Previous Product Quantity
-  const result = await ProductModel.findOne({ _id: productID })
-  const prevQuantity = result?.inventory.quantity as number
+const updateProductIntoDB = async (
+  productId: string,
+  updateProductDoc: Product,
+) => {
+  // !get Update Doc Quantity
+  const updateQuantity = updateProductDoc?.inventory?.quantity as number
+  // ! Get Matched Product By Product Id
+  const result = await ProductModel.findOne({ _id: productId })
   const databaseProductId = result?._id.toString()
 
-  if (prevQuantity >= quantity && databaseProductId === productID) {
+  if (databaseProductId === productId) {
     // ! find Product By id And Update Quantity
     const updatedProduct = await ProductModel.findByIdAndUpdate(
-      productID,
-      { 'inventory.quantity': prevQuantity - quantity },
+      productId,
+      { 'inventory.quantity': updateQuantity },
       { new: true },
     )
 
-    if ((updatedProduct?.inventory.quantity as number) === 0) {
-      await ProductModel.findByIdAndUpdate(
-        productID,
-        { 'inventory.inStock': false },
-        { new: true },
-      )
-    }
+    // if ((updatedProduct?.inventory.quantity as number) === 0) {
+    //   await ProductModel.findByIdAndUpdate(
+    //     productID,
+    //     { 'inventory.inStock': false },
+    //     { new: true },
+    //   )
+    // }
     return updatedProduct
   } else {
     const success: boolean = false
