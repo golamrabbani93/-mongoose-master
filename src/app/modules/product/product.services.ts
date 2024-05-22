@@ -56,14 +56,6 @@ const updateProductIntoDB = async (
       { 'inventory.quantity': updateQuantity },
       { new: true },
     )
-
-    // if ((updatedProduct?.inventory.quantity as number) === 0) {
-    //   await ProductModel.findByIdAndUpdate(
-    //     productID,
-    //     { 'inventory.inStock': false },
-    //     { new: true },
-    //   )
-    // }
     return updatedProduct
   } else {
     const success: boolean = false
