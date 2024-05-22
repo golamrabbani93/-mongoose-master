@@ -33,7 +33,7 @@ const createOrder = async (req: Request, res: Response) => {
 
     const result = await orderServices.saveOrderIntoDB(validOrderData)
 
-    if (result !== false) {
+    if (result !== false && result !== 'not Found') {
       res.status(200).json({
         success: true,
         message: 'Order created successfully!!',
@@ -46,11 +46,18 @@ const createOrder = async (req: Request, res: Response) => {
         success: false,
         message: 'Insufficient quantity available in inventory',
       })
+    }
+
+    //! This Condition Use for Product Not Found
+    else if (result === 'not Found') {
+      res.status(400).json({
+        success: false,
+        message: 'Product Not Found',
+      })
     } else {
       res.status(400).json({
-        success: true,
+        success: false,
         message: 'Order created unsuccessfull!!',
-        data: result,
       })
     }
   } catch (error) {

@@ -10,6 +10,10 @@ const saveOrderIntoDB = async (orderData: Order) => {
 
   // !get Matched Product By Order Product Id
   const dbProduct = await productServices.getSingleProductIntoDB(productId)
+  if (!dbProduct) {
+    const message: string = 'not Found'
+    return message
+  }
   // !  Get Matched Product Id And Quantity
   const prevQuantity = dbProduct?.inventory?.quantity as number
   const databaseProductId = dbProduct?._id.toString() as string
