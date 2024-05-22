@@ -1,3 +1,4 @@
+import { ProductModel } from '../product/product.model'
 import { productServices } from '../product/product.services'
 import { Order } from './order.interface.'
 import { OrderModel } from './order.model'
@@ -7,15 +8,34 @@ const saveOrderIntoDB = async (orderData: Order) => {
   // !get Product id and quantity
   const { productId, quantity } = orderData
 
-  //  !upadte Quantity with productID
-  const updateQuantity = await productServices.updateProductIntoDB(
-    productId,
-    quantity,
-  )
-  // ! If Product Quantity Available the user create new order
-  if (updateQuantity !== false) {
-    const result = await OrderModel.create(orderData)
-    return result
+  // !get Matched Product By Order Product Id
+  const dbProduct = await productServices.getSingleProductIntoDB(productId)
+  // !  Get Matched Product Id And Quantity
+  const prevQuantity = dbProduct?.inventory?.quantity as number
+  const databaseProductId = dbProduct?._id.toString() as string
+
+  if (prevQuantity >= quantity && databaseProductId === productId) {
+    // ! If Product Quantity Available the user create new order
+    const createdOrder = await OrderModel.create(orderData)
+
+    // ! find Product By id And Update Quantity
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+      productId,
+      { 'inventory.quantity': prevQuantity - quantity },
+      { new: true },
+    )
+    // !when Updated Product quantity 0 then update Instock property false
+    if ((updatedProduct?.inventory.quantity as number) === 0) {
+      await ProductModel.findByIdAndUpdate(
+        productId,
+        { 'inventory.inStock': false },
+        { new: true },
+      )
+    }
+    return createdOrder
+  } else {
+    const success: boolean = false
+    return success
   }
 }
 

@@ -43,18 +43,20 @@ const updateProductIntoDB = async (
   productId: string,
   updateProductDoc: Product,
 ) => {
-  // !get Update Doc Quantity
-  const updateQuantity = updateProductDoc?.inventory?.quantity as number
   // ! Get Matched Product By Product Id
   const result = await ProductModel.findOne({ _id: productId })
   const databaseProductId = result?._id.toString()
 
   if (databaseProductId === productId) {
-    // ! find Product By id And Update Quantity
+    // ! find Product By id And Update
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       productId,
-      { 'inventory.quantity': updateQuantity },
-      { new: true },
+      updateProductDoc,
+      {
+        new: true,
+        overwrite: true,
+        runValidators: true,
+      },
     )
     return updatedProduct
   } else {

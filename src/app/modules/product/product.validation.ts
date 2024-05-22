@@ -5,12 +5,12 @@ export const productValidationSchema = z.object({
     .string({
       invalid_type_error: 'Name must be string',
     })
-    .nonempty('Name is required'),
+    .min(0, 'Name is required'),
   description: z
     .string({
       invalid_type_error: 'Description must be string',
     })
-    .nonempty('Description is required'),
+    .min(1, 'Description is required'),
   price: z
     .number({
       invalid_type_error: 'Price must be Number',
@@ -21,7 +21,7 @@ export const productValidationSchema = z.object({
     .string({
       invalid_type_error: 'Category must be String',
     })
-    .nonempty('Category is required'),
+    .min(1, 'Category is required'),
   tags: z
     .array(
       z.string({
@@ -32,15 +32,19 @@ export const productValidationSchema = z.object({
   variants: z
     .array(
       z.object({
-        type: z.string({
-          invalid_type_error: 'Product variants Type must be String',
-          required_error: 'Product variants Type is required',
-        }),
+        type: z
+          .string({
+            invalid_type_error: 'Product variants Type must be String',
+            required_error: 'Product variants Type is required',
+          })
+          .min(1, 'Product variants Type is required'),
 
-        value: z.string({
-          invalid_type_error: 'Product variants value must be String',
-          required_error: 'Product variants value is required',
-        }),
+        value: z
+          .string({
+            invalid_type_error: 'Product variants value must be String',
+            required_error: 'Product variants value is required',
+          })
+          .min(1, 'Product variants value is required'),
       }),
     )
     .nonempty('Variants is required'),
